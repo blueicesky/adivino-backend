@@ -84,16 +84,3 @@ class get_stats:
         return result_array
 
 
-# obj = get_stats()
-# obj.get_data()
-# obj.make_dict()
-# print(lol.head())
-# lesse = obj.name_search('rooney')
-# print(lesse)
-# print players.head()
-# see = obj.name_search('roon')
-# print(see)
-# print players.info()
-# for item in columns:
-#     # print
-
