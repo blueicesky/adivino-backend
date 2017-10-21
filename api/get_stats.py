@@ -83,14 +83,22 @@ class get_stats:
         game_time = ""
         print("FUCKIT3" + game_time)
         for index, rows in self.latest_player_data.iterrows():
+            print(rows['web_name'])
             for index_p, rows_p in df_p.iterrows():
                 if (rows['web_name'] == rows_p['Name']):
+                    print(rows_p['Name'])
                     age = df_p.iloc[index_p]['Age']
                     photo = df_p.iloc[index_p]['Photo']
                     nation = df_p.iloc[index_p]['Nationality']
                     pos = df_p.iloc[index_p]['Preferred Positions']
                     club = df_p.iloc[index_p]['Club']
                     break;
+        self.latest_player_data.loc[index, 'Age'] = age
+        self.latest_player_data.loc[index, 'Photo_URL'] = photo
+        self.latest_player_data.loc[index, 'nation'] = nation
+        self.latest_player_data.loc[index, 'pos'] = pos
+        self.latest_player_data.loc[index, 'Club'] = club
+        
         return age, photo, nation, pos, club
 
     def find_matchInfo(self):
@@ -108,27 +116,23 @@ class get_stats:
                         game_time = (game_date + " " + game_hour)
                         game_time = datetime.strptime(game_time, '%Y-%m-%d %H:%M')
                         break;
+            print("FUCKITBETH")
+            self.latest_player_data.loc[index, 'GameTime'] = game_time
+            print("FUCKITJEFF")
         return game_time
 
     def augment_profile_stats(self):
-        age, photo, nation, pos, club = self.find_profile()
-        game_time = self.find_matchInfo()
-        print("FUCKIT" + nation)
-        print("FUCKIT" + game_time)
-
+        print("FUCKITMORTY")
         self.latest_player_data['GameTime'] = None
         self.latest_player_data['Age'] = None
         self.latest_player_data['Photo_URL'] = None
         self.latest_player_data['nation'] = None
         self.latest_player_data['pos'] = None
         self.latest_player_data['Club'] = None
-
-        self.latest_player_data.loc[index, 'GameTime'] = game_time
-        self.latest_player_data.loc[index, 'Age'] = age
-        self.latest_player_data.loc[index, 'Photo_URL'] = photo
-        self.latest_player_data.loc[index, 'nation'] = nation
-        self.latest_player_data.loc[index, 'pos'] = pos
-        self.latest_player_data.loc[index, 'Club'] = club
+        
+        game_time = self.find_matchInfo()
+        age, photo, nation, pos, club = self.find_profile()
+        print("FUCKITRICK")
         
         return None
 
