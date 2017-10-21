@@ -1,10 +1,10 @@
 import json
 import urllib3
 import csv
-import datetime
 import unidecode
 import pandas as pd
 import requests
+from datetime import datetime
 
 match_file = 'data/EPL_Fixture_1718.csv'
 player_file = 'data/fifa_player.csv'
@@ -73,15 +73,14 @@ class get_stats:
             dictionary['latest_player_data'].append(temp)
             print("added " + player['web_name'] + " to dictionary")
 
-        dictionary['date_indexed'] = datetime.datetime.today()
+        dictionary['date_indexed'] = datetime.today()
         self.latest_player_data = pd.DataFrame(dictionary['latest_player_data'])
 
         return None
 
     def find_profile(self):
         df_p = pd.read_csv(player_file)
-        game_time = ""
-        print("FUCKIT3" + game_time)
+        print("FUCKIT3")
         for index, rows in self.latest_player_data.iterrows():
             print(rows['web_name'])
             for index_p, rows_p in df_p.iterrows():
@@ -103,7 +102,8 @@ class get_stats:
 
     def find_matchInfo(self):
         df_m = pd.read_csv(match_file)
-        print("FUCKIT4" + game_time)
+        print("FUCKIT4")
+        game_time =""
         for index, rows in self.latest_player_data.iterrows():
             for index_m, rows_m in df_m.iterrows():
                 game_date = datetime.strptime(df_m.iloc[index]['DATE'], '%Y-%m-%d')
