@@ -1,34 +1,33 @@
 import json
-import urllib
-from ConfigParser import SafeConfigParser
+import urllib3
 import csv
 import datetime
 import unidecode
 import pandas as pd
+import requests
+
 
 
 class get_stats:
 
     def __init__(self):
 
-        config = SafeConfigParser()
-        config.read('utilities/config.ini')
-        self.player_data_url = config.get('data_source', 'player_form_url')
+        self.player_data_url = 'https://fantasy.premierleague.com/drf/elements/'
         self.team_code_dict = {}
-        with open('utilities/team_codes.csv') as csvfile:
+        self.http = urllib3.PoolManager()
+        with open('team_codes.csv') as csvfile:
             reader = csv.DictReader(csvfile)
             for row in reader:
                 self.team_code_dict[row['team_code']] = row['team_name']
 
     def get_data(self):
-        response = urllib.urlopen(self.player_data_url)
-        myfile = response.read()
+        http_pool = urllib3.connection_from_url(self.player_data_url)
+        r = http_pool.urlopen('GET', self.player_data_url)
+        myfile = r.data
         self.player_data = json.loads(myfile)
 
-
-    def get_team_name(self,team_code):
+    def get_team_name(self, team_code):
         return self.team_code_dict[team_code]
-
 
     def make_dict(self):
         dictionary = {}
@@ -72,17 +71,27 @@ class get_stats:
             print("added " + player['web_name'] + " to dictionary")
 
         dictionary['date_indexed'] = datetime.datetime.today()
-        return pd.DataFrame(dictionary['latest_player_data'])
+        self.latest_player_data = pd.DataFrame(dictionary['latest_player_data'])
 
-    def name_search(self, name, df):
-        return df[df['last_name'].str.contains(name)]
+    def name_search(self, name):
+        # stats = self.latest_player_data[self.latest_player_data['web_name'].str.contains(name)].to_dict()
+        stats = self.latest_player_data[self.latest_player_data['web_name'].str.contains(name)]
+        result_array = []
+        for item in stats.iterrows():
+            result_array.append(item[1].to_dict())
 
-obj = get_stats()
-obj.get_data()
-players = obj.make_dict()
-# lesse = obj.name_search('rooney', players)
+        return result_array
+
+
+# obj = get_stats()
+# obj.get_data()
+# obj.make_dict()
+# print(lol.head())
+# lesse = obj.name_search('rooney')
+# print(lesse)
 # print players.head()
-print players[players['filter_web_name'].str.contains('nandez')]
+# see = obj.name_search('roon')
+# print(see)
 # print players.info()
 # for item in columns:
 #     # print
