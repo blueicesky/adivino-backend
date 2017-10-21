@@ -34,6 +34,7 @@ class get_stats:
         dictionary['latest_player_data'] = []
 
         for player in self.player_data:
+            print(player)
             if "Joined" in player["news"] or "Transferred" in player["news"]:
                 print(player["news"])
                 continue
@@ -75,7 +76,7 @@ class get_stats:
 
     def name_search(self, name):
         # stats = self.latest_player_data[self.latest_player_data['web_name'].str.contains(name)].to_dict()
-        stats = self.latest_player_data[self.latest_player_data['web_name'].str.contains(name)]
+        stats = self.latest_player_data[self.latest_player_data['filter_web_name'].str.contains(name)]
         result_array = []
         for item in stats.iterrows():
             result_array.append(item[1].to_dict())
