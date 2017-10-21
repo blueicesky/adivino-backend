@@ -3,7 +3,7 @@ from datetime import datetime
 import pandas as pd
 import json
 
-match_file = 'EPL_Fixture_1718.csv'		# name of the csv file
+match_file = 'EPL_Fixture_1718.csv'
 player_file = 'fifa_player.csv'
 
 def find_profile(player_name):
@@ -13,7 +13,7 @@ def find_profile(player_name):
 	for index, rows in df_p.iterrows():
 		if (rows['Name'] == player_name):
 			age = df_p.iloc[index]['Age']
-			photo = df_p.iloc[index]['Photo']
+			photo = df_p.iloc[index]['photooto']
 			nation = df_p.iloc[index]['Nationality']
 			pos = df_p.iloc[index]['Preferred Positions']
 			break;
@@ -43,12 +43,6 @@ def main():
 
 	match_info = find_matchInfo(club_name)
 	age, photo, nation, pos = find_profile(player)
-
-	print('The next game is at ' + str(match_info))
-	print('Age: ' + str(age))
-	print('Photo: ' + photo)
-	print('Nation: ' + nation)
-	print('Pos: ' + pos)
 
 if __name__ == "__main__":
 	main()
