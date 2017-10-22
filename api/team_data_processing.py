@@ -1,8 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import sys
-reload(sys)
-sys.setdefaultencoding('utf-8')
+# import sys
+# sys.setdefaultencoding('utf-8')
 import re
 from elasticsearch import Elasticsearch
 import csv
@@ -10,12 +9,12 @@ import csv
 import unicodedata
 from elasticsearch_interaction import ElasticSearchInteraction
 import datetime
-from elasticsearch_schema import process_schema
+import pandas as pd
 
 class team_data_processing:
 
     def __init__(self,host,port):
-        print "team data processing is running"
+        print("team data processing is running")
         self.es = Elasticsearch([{'host': host, 'port': port}])
         self.main_11 = {}
         self.get_main_11()
@@ -39,14 +38,11 @@ class team_data_processing:
                 away_score = float(item[score_position+2:score_position+3])
                 score = home_score-away_score
             else:
-                print "Match hasnt taken place yet"
-            # print home_team
-            # print away_team
-            # print score
+                print("Match hasnt taken place yet")
             if not self.game_indexed(home_team, away_team):
                 self.process_features(home_team, away_team, score, home_score, away_score)
             else:
-                print home_team + " vs " + away_team + "has been already indexed"
+                print(home_team + " vs " + away_team + "has been already indexed")
 
     def game_indexed(self, home, away):
         res = self.es.search(index="data_features", body={"query": {"match_phrase": {"home_team_name": home}}})
@@ -57,7 +53,7 @@ class team_data_processing:
         # print res['hits']['total']
 
     def get_main_11(self):
-        with open('utilities/main-11.csv') as csvfile:
+        with open('data/main-11.csv') as csvfile:
             reader = csv.DictReader(csvfile)
             for row in reader:
                 self.main_11[row['team_name']] = row['players'].strip()
@@ -95,7 +91,7 @@ class team_data_processing:
     def process_features(self, home_team, away_team, score, home_score,away_score):
         player_res = self.es.search(index="player_data", body={"sort": [{"date_indexed": {"order": "desc"}}], "query": {"match_all" : {}},"size" : 1})
         player_data = player_res['hits']['hits'][0]['_source']['latest_player_data']
-
+        # print("yaas", player_data)
         for item in player_data:
             temp_obj = item['web_name']
             item['web_name'] = self.strip_accents(temp_obj)
@@ -120,13 +116,13 @@ class team_data_processing:
         for item in home_team_main11:
             temp_object = filter(lambda player: player['web_name'] == item, player_data)
             individual_player_data = filter(lambda player: player['team'] == home_team, temp_object)
-            print item
+            # print item
             temp = individual_player_data[0]
             home_team_main11_data.append(temp)
         for item in away_team_main11:
             temp_object = filter(lambda player: player['web_name'] == item, player_data)
             individual_player_data = filter(lambda player: player['team'] == away_team, temp_object)
-            print item
+            # print item
             temp = individual_player_data[0]
             away_team_main11_data.append(temp)
 
@@ -163,16 +159,18 @@ class team_data_processing:
         dictionary['date_indexed'] = datetime.datetime.today()
 
         self.es_inter.index_features("data_features", "match_data", dictionary)
-        print "indexed" + home_team + " vs " + away_team
+        print("indexed" + home_team + " vs " + away_team)
 
     def get_dreametam_countdiff(self, home_team_array, away_team_array):
         home_int = 0
         away_int = 0
         for item in home_team_array:
-            if item['in_dreamteam'] == True:
+            temp_obje = item[0]
+            if temp_obje['in_dreamteam'] == True:
                 home_int += 1
         for item in away_team_array:
-            if item['in_dreamteam'] == True:
+            temp_obje = item[0]
+            if temp_obje['in_dreamteam'] == True:
                 away_int += 1
         final = home_int-away_int
         return final
@@ -190,10 +188,23 @@ class team_data_processing:
 
     def avg_and_minus(self, tag, home_data, away_data):
         if len(home_data) != 11 or len(away_data) != 11:
-            print "You fucked up"
+            print("You fucked up")
             sys.exit()
-        home_obj = sum(d[tag] for d in home_data) / len(home_data)
-        away_obj = sum(d[tag] for d in away_data) / len(away_data)
+        # home_obj = sum(item[tag] for item in home_data)
+        print(tag)
+        home_obj = 0
+        for item in home_data:
+            temp_obje = item[0]
+            home_obj += temp_obje[tag]
+        away_obj = 0
+        for item in home_data:
+            temp_obje = item[0]
+            away_obj += temp_obje[tag]
+        print(home_obj)
+        print(away_obj)
+        # away_obj = sum(item[tag] for item in away_data)
+        # home_obj = sum(d[tag] for d in home_data) / len(home_data)
+        # away_obj = sum(d[tag] for d in away_data) / len(away_data)
         return home_obj-away_obj
 
     def get_features(self, json_response):
@@ -204,6 +215,7 @@ class team_data_processing:
                                     body={"sort": [{"date_indexed": {"order": "desc"}}], "query": {"match_all": {}},
                                           "size": 1})
         player_data = player_res['hits']['hits'][0]['_source']['latest_player_data']
+
 
         for item in player_data:
             temp_obj = item['web_name']
@@ -216,34 +228,41 @@ class team_data_processing:
         team_data = self.fix_team_names(team_data)
 
         home_team_data = filter(lambda team_name: team_name['team_name'] == home_team, team_data)
-        home_team_data = home_team_data[0]
+        test = list(home_team_data)
+        home_team_data = test[0]
         away_team_data = filter(lambda team_name: team_name['team_name'] == away_team, team_data)
-        away_team_data = away_team_data[0]
+        test = list(away_team_data)
+        away_team_data = test[0]
 
         home_team_main11_data = []
         away_team_main11_data = []
 
-        home_team_main11 = []
-        away_team_main11 = []
-        for item in json_response['team1_players']:
-            temp_ob = item.decode('utf-8')
-            home_team_main11.append(self.strip_accents(temp_ob))
-        for item in json_response['team2_players']:
-            temp_ob = item.decode('utf-8')
-            away_team_main11.append(self.strip_accents(temp_ob))
+        home_team_main11 = json_response['team1_players'].split(";")
+        away_team_main11 = json_response['team2_players'].split(";")
+        # print(json_response['team1_players'])
+        # for item in json_response['team1_players']:
+        #     temp_ob = item
+        #     home_team_main11.append(self.strip_accents(temp_ob))
+        # for item in json_response['team2_players']:
+        #     temp_ob = item
+        #     away_team_main11.append(self.strip_accents(temp_ob))
+
+        for item in player_data:
+            temp_obj = item['web_name']
+            item['web_name'] = temp_obj.decode("utf-8")
 
         for item in home_team_main11:
-            temp_object = filter(lambda player: player['web_name'] == item, player_data)
-            individual_player_data = filter(lambda player: player['team'] == home_team, temp_object)
-            print item
-            temp = individual_player_data[0]
-            home_team_main11_data.append(temp)
+            individual_player_data = list(filter(lambda player: player['web_name'] == item, player_data))
+            # print(temp_object)
+            # individual_player_data = list(filter(lambda player: player['team'] == home_team, temp_object))
+            # print(individual_player_data)
+            # temp = individual_player_data[0]
+            home_team_main11_data.append(individual_player_data)
         for item in away_team_main11:
-            temp_object = filter(lambda player: player['web_name'] == item, player_data)
-            individual_player_data = filter(lambda player: player['team'] == away_team, temp_object)
-            print item
-            temp = individual_player_data[0]
-            away_team_main11_data.append(temp)
+            individual_player_data = list(filter(lambda player: player['web_name'] == item, player_data))
+            # individual_player_data = list(filter(lambda player: player['team'] == away_team, temp_object))
+            # temp = individual_player_data[0]
+            away_team_main11_data.append(individual_player_data)
 
         dictionary = {}
         dictionary['home_team_name'] = home_team

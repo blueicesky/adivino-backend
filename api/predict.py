@@ -1,30 +1,21 @@
 # coding=utf-8
-from ConfigParser import SafeConfigParser
 from elasticsearch import Elasticsearch
-from ConfigParser import SafeConfigParser
-from utilities.team_data_processing import team_data_processing
+from team_data_processing import team_data_processing
 from sklearn.ensemble import RandomForestClassifier
 import pandas as pd
-
-
+import csv
 
 class predict:
 
     def __init__(self):
         # config stuff
-        config = SafeConfigParser()
-        config.read('indexing/utilities/config.ini')
-
-        es_host = config.get('elasticsearch', 'HOST')
-        es_port = config.getint('elasticsearch', 'PORT')
-        es_index_name = config.get('elasticsearch', 'PROCESS_INDEX')
-        es_doc_type = config.get('elasticsearch', 'PROCESS_DOC_TYPE')
+        es_host = '54.245.215.12'
+        es_port = '9200'
+        es_index_name = 'data_features'
+        es_doc_type = 'game'
         es = Elasticsearch([{'host': es_host, 'port': es_port}])
-
-        # es_host = "localhost"
-        # es_port = "9200"
-        # es_index_name = "data_features"
-        # es = Elasticsearch([{'host': es_host, 'port': es_port}])
+        self.main_11 = {}
+        self.get_main_11()
 
         res = es.search(index=es_index_name, body={"size": 100, "query": {"match_all": {}}})
         res = res['hits']['hits']
@@ -121,10 +112,26 @@ class predict:
         self.predictors = ["form","assists","pdo", "shots_on_target","total_shot_ratio","fantasy_points_per_game",
                            "influence", "ict_index",  "form", "ea_index", "threat", "goals_scored",
                            "fantasy_cost_change", "shoot_percentage","fantasy_total_points" ]
-        self.alg = RandomForestClassifier(random_state=1, n_estimators=50, min_samples_split=7, min_samples_leaf=3)
-        print("changed")
-
+        self.alg_home = RandomForestClassifier(random_state=1, n_estimators=50, min_samples_split=7, min_samples_leaf=3)
+        self.alg_home.fit(self.df[self.predictors], list(self.df['home']))
+        self.alg_away = RandomForestClassifier(random_state=1, n_estimators=50, min_samples_split=7, min_samples_leaf=3)
+        self.alg_away.fit(self.df[self.predictors], list(self.df['away']))
+        #
         self.process = team_data_processing(es_host, es_port)
+
+    def get_main_11(self):
+        with open('data/main-11.csv') as csvfile:
+            reader = csv.DictReader(csvfile)
+            for row in reader:
+                self.main_11[row['team_name']] = row['players'].strip()
+
+    def make_struct(self, home_team_name, away_team_name):
+        new_dict = {}
+        new_dict['team1_name'] = home_team_name
+        new_dict['team2_name'] = away_team_name
+        new_dict['team1_players'] = self.main_11[home_team_name]
+        new_dict['team2_players'] = self.main_11[away_team_name]
+        return new_dict
 
     def process_new_feature(self, json_doc):
 
@@ -154,12 +161,18 @@ class predict:
             'goals_scored': [return_doc["goals_scored"]]}
 
         df_predict = pd.DataFrame(d_predict)
-        self.alg.fit(self.df[self.predictors], self.df['home'])
-        predictions_home = self.alg.predict(df_predict[self.predictors])
-        self.alg.fit(self.df[self.predictors], self.df['away'])
-        predictions_away = self.alg.predict(df_predict[self.predictors])
+        # self.alg.fit(self.df[self.predictors], self.df['home'])
+        predictions_home = self.alg_home.predict(df_predict[self.predictors])
+        # self.alg_away.fit(self.df[self.predictors], self.df['away'])
+        predictions_away = self.alg_away.predict(df_predict[self.predictors])
 
-        return_score = [int(predictions_home[0]),int(predictions_away[0])]
+        return_score = [int(predictions_home[0]), int(predictions_away[0])]
         return return_score
+
+
+test = predict()
+lol = test.make_struct("Manchester United", "Chelsea")
+score = test.process_new_feature(lol)
+print(score)
 
 
