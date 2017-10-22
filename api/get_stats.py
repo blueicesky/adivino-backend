@@ -6,8 +6,8 @@ import pandas as pd
 import requests
 from datetime import datetime
 
+player_file = 'data/filtered_fifa.csv'
 match_file = 'data/EPL_Fixture_1718.csv'
-player_file = 'data/fifa_player.csv'
 
 class get_stats:
 
@@ -100,40 +100,20 @@ class get_stats:
         
         return age, photo, nation, pos, club
 
-    def find_matchInfo(self):
+    def find_matchInfo(self, home_team):
         df_m = pd.read_csv(match_file)
-        print("FUCKIT4")
-        game_time =""
+
         for index, rows in self.latest_player_data.iterrows():
             for index_m, rows_m in df_m.iterrows():
-                game_date = datetime.strptime(df_m.iloc[index]['DATE'], '%Y-%m-%d')
-
+                game_date = datetime.strptime(df_m.iloc[index_m]['DATE'], '%Y-%m-%d')
                 if (game_date > datetime.now()):
-                    if ((rows_m['HOME TEAM'] == rows['team'] ) or (rows_m['AWAY TEAM'] == rows['team'])):
+                    if ((rows_m['HOME TEAM'] == rows['team']) or (rows_m['AWAY TEAM'] == rows['team'])):
                         game_date = df_m.iloc[index_m]['DATE']
                         game_hour = df_m.iloc[index_m]['TIME']
-                        fixture = df_m.iloc[index_m]['FIXTURE']
-                        game_time = (game_date + " " + game_hour)
-                        game_time = datetime.strptime(game_time, '%Y-%m-%d %H:%M')
-                        break;
-            print("FUCKITBETH")
-            self.latest_player_data.loc[index, 'GameTime'] = game_time
-            print("FUCKITJEFF")
-        return game_time
-
-    def augment_profile_stats(self):
-        print("FUCKITMORTY")
-        self.latest_player_data['GameTime'] = None
-        self.latest_player_data['Age'] = None
-        self.latest_player_data['Photo_URL'] = None
-        self.latest_player_data['nation'] = None
-        self.latest_player_data['pos'] = None
-        self.latest_player_data['Club'] = None
-        
-        game_time = self.find_matchInfo()
-        age, photo, nation, pos, club = self.find_profile()
-        print("FUCKITRICK")
-        
+                        fixture = df_m.iloc[index_m]['FIXTURE']  # Get the away team
+                    if fixture.find(home_team) == 0:
+                        start_pos = fixture.index(' V ', len(home_team))
+                        return fixture[(start_pos + 3): 100].rstrip()
         return None
 
     def name_search(self, name):
@@ -146,15 +126,15 @@ class get_stats:
         return result_array
 
 
-obj = get_stats()
-obj.get_data()
-obj.make_dict()
-print("FUCKIT1")
-obj.augment_profile_stats()
-print("FUCKIT2")
-# print(lol.head())
-lesse = obj.name_search('rooney')
-print(lesse)
+# obj = get_stats()
+# obj.get_data()
+# obj.make_dict()
+# print("FUCKIT1")
+# obj.augment_profile_stats()
+# print("FUCKIT2")
+# # print(lol.head())
+# lesse = obj.name_search('rooney')
+# print(lesse)
 # print players.head()
 # see = obj.name_search('roon')
 # print(see)

@@ -168,7 +168,9 @@ class team_data_processing:
             temp_obje = item[0]
             if temp_obje['in_dreamteam'] == True:
                 home_int += 1
+        print(len(away_team_array))
         for item in away_team_array:
+            print(item)
             temp_obje = item[0]
             if temp_obje['in_dreamteam'] == True:
                 away_int += 1
@@ -194,6 +196,7 @@ class team_data_processing:
         print(tag)
         home_obj = 0
         for item in home_data:
+            print(item)
             temp_obje = item[0]
             home_obj += temp_obje[tag]
         away_obj = 0

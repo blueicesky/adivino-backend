@@ -170,9 +170,9 @@ class predict:
         return return_score
 
 
-test = predict()
-lol = test.make_struct("Manchester United", "Chelsea")
-score = test.process_new_feature(lol)
-print(score)
+# test = predict()
+# lol = test.make_struct("Manchester United", "Chelsea")
+# score = test.process_new_feature(lol)
+# print(score)
 
 
