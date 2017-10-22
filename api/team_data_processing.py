@@ -5,7 +5,7 @@
 import re
 from elasticsearch import Elasticsearch
 import csv
-# from sklearn import preprocessing
+#from sklearn import preprocessing
 import unicodedata
 from elasticsearch_interaction import ElasticSearchInteraction
 import datetime

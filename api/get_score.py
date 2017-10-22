@@ -12,7 +12,7 @@ class get_score(object):
         self.stats = get_stats()
         self.stats.get_data()
         self.stats.make_dict()
-        # self.stats.augment_profile_stats()
+        self.stats.augment_profile()
         self.predicter = predict()
 
         print('hello')

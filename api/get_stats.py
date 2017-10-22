@@ -78,27 +78,35 @@ class get_stats:
 
         return None
 
-    def find_profile(self):
+    def augment_profile(self):
         df_p = pd.read_csv(player_file)
-        print("FUCKIT3")
+
+        self.latest_player_data['Age'] = None
+        self.latest_player_data['Photo_URL'] = None
+        self.latest_player_data['Nationality'] = None
+        self.latest_player_data['Preferred Positions'] = None
+        self.latest_player_data['Club'] = None
+
+        age = ""
+        photo = ""
+        nation = ""
+        pos = ""
+        club = ""
+        counter = 0
         for index, rows in self.latest_player_data.iterrows():
-            print(rows['web_name'])
+            print("# " + str(index) + ": " + rows['last_name'])
             for index_p, rows_p in df_p.iterrows():
-                if (rows['web_name'] == rows_p['Name']):
-                    print(rows_p['Name'])
-                    age = df_p.iloc[index_p]['Age']
-                    photo = df_p.iloc[index_p]['Photo']
-                    nation = df_p.iloc[index_p]['Nationality']
-                    pos = df_p.iloc[index_p]['Preferred Positions']
-                    club = df_p.iloc[index_p]['Club']
-                    break;
-        self.latest_player_data.loc[index, 'Age'] = age
-        self.latest_player_data.loc[index, 'Photo_URL'] = photo
-        self.latest_player_data.loc[index, 'nation'] = nation
-        self.latest_player_data.loc[index, 'pos'] = pos
-        self.latest_player_data.loc[index, 'Club'] = club
-        
-        return age, photo, nation, pos, club
+                if (str(rows_p['Name'])).lower() == str(rows['last_name']):
+                    self.latest_player_data.loc[index, 'Age'] = rows_p['Age']
+                    self.latest_player_data.loc[index, 'Photo_URL'] = rows_p['Photo']
+                    self.latest_player_data.loc[index, 'Nationality'] = rows_p['Nationality']
+                    self.latest_player_data.loc[index, 'Preferred Positions'] = rows_p['Preferred Positions']
+                    self.latest_player_data.loc[index, 'Club'] = rows_p['Club']
+                    print("Broke")
+                    counter += 1
+                    break
+        print("Total players found is " + str(counter))
+        return None
 
     def find_matchInfo(self, home_team):
         df_m = pd.read_csv(match_file)
