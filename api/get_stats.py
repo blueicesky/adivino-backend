@@ -94,9 +94,9 @@ class get_stats:
         club = ""
         counter = 0
         for index, rows in self.latest_player_data.iterrows():
-            print("# " + str(index) + ": " + rows['last_name'])
+            print("# " + str(index) + ": " + rows['filter_last_name'])
             for index_p, rows_p in df_p.iterrows():
-                if (str(rows_p['Name'])).lower() == str(rows['last_name']):
+                if (str(rows_p['Name'])).lower() == str(rows['filter_last_name']):
                     self.latest_player_data.loc[index, 'Age'] = rows_p['Age']
                     self.latest_player_data.loc[index, 'Photo_URL'] = rows_p['Photo']
                     self.latest_player_data.loc[index, 'Nationality'] = rows_p['Nationality']

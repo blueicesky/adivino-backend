@@ -2,9 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8ba6008e-b50c-40a4-97cd-0ba885fc78ca" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/api/get_score.py" afterPath="$PROJECT_DIR$/api/get_score.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/api/get_stats.py" afterPath="$PROJECT_DIR$/api/get_stats.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/api/team_data_processing.py" afterPath="$PROJECT_DIR$/api/team_data_processing.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -19,10 +18,10 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="get_score.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="get_score.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/api/get_score.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="210">
+            <state relative-caret-position="-119">
               <caret line="14" column="36" lean-forward="false" selection-start-line="14" selection-start-column="36" selection-end-line="14" selection-end-column="36" />
               <folding>
                 <element signature="e#0#13#0" expanded="true" />
@@ -31,11 +30,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="get_stats.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="get_stats.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/api/get_stats.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="94">
-              <caret line="80" column="23" lean-forward="false" selection-start-line="80" selection-start-column="8" selection-end-line="80" selection-end-column="23" />
+            <state relative-caret-position="396">
+              <caret line="96" column="67" lean-forward="false" selection-start-line="96" selection-start-column="67" selection-end-line="96" selection-end-column="67" />
               <folding>
                 <element signature="e#0#11#0" expanded="true" />
               </folding>
@@ -46,9 +45,11 @@
       <file leaf-file-name="team_data_processing.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/api/team_data_processing.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-75">
-              <caret line="7" column="1" lean-forward="false" selection-start-line="7" selection-start-column="1" selection-end-line="7" selection-end-column="1" />
-              <folding />
+            <state relative-caret-position="315">
+              <caret line="183" column="0" lean-forward="false" selection-start-line="183" selection-start-column="0" selection-end-line="188" selection-end-column="18" />
+              <folding>
+                <element signature="e#93#102#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -110,6 +111,8 @@
       <find>evans</find>
       <find>kar</find>
       <find>find_mat</find>
+      <find>make</find>
+      <find>augmen</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -125,8 +128,8 @@
         <option value="$PROJECT_DIR$/api/predict.py" />
         <option value="$PROJECT_DIR$/api/data/main-11.csv" />
         <option value="$PROJECT_DIR$/api/team_data_processing.py" />
-        <option value="$PROJECT_DIR$/api/get_stats.py" />
         <option value="$PROJECT_DIR$/api/get_score.py" />
+        <option value="$PROJECT_DIR$/api/get_stats.py" />
       </list>
     </option>
   </component>
@@ -558,30 +561,32 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/api/get_score.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-119">
+          <caret line="14" column="36" lean-forward="false" selection-start-line="14" selection-start-column="36" selection-end-line="14" selection-end-column="36" />
+          <folding>
+            <element signature="e#0#13#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/api/team_data_processing.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-75">
-          <caret line="7" column="1" lean-forward="false" selection-start-line="7" selection-start-column="1" selection-end-line="7" selection-end-column="1" />
-          <folding />
+        <state relative-caret-position="315">
+          <caret line="183" column="0" lean-forward="false" selection-start-line="183" selection-start-column="0" selection-end-line="188" selection-end-column="18" />
+          <folding>
+            <element signature="e#93#102#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/api/get_stats.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="94">
-          <caret line="80" column="23" lean-forward="false" selection-start-line="80" selection-start-column="8" selection-end-line="80" selection-end-column="23" />
+        <state relative-caret-position="396">
+          <caret line="96" column="67" lean-forward="false" selection-start-line="96" selection-start-column="67" selection-end-line="96" selection-end-column="67" />
           <folding>
             <element signature="e#0#11#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/api/get_score.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="14" column="36" lean-forward="false" selection-start-line="14" selection-start-column="36" selection-end-line="14" selection-end-column="36" />
-          <folding>
-            <element signature="e#0#13#0" expanded="true" />
           </folding>
         </state>
       </provider>
