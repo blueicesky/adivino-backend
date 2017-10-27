@@ -24,4 +24,5 @@ We are planning to refine our algorithm to predict the correct score and perform
 We are planning to make our realtime detection more accurate and more efficient. (i.e. reduce noise, cleaning up the inputs to the SDK)
 We are planning to make our api open source so that way everyone can integrate our API into their apps or websites.
 
-![Alt Text](https://github.com/gauravlath07/adivino-backend/blob/master/preview.gif)
+
+![](https://github.com/gauravlath07/adivino-backend/blob/master/preview.gif {width=40px height=400px})
