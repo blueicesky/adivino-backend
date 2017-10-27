@@ -25,4 +25,4 @@ We are planning to make our realtime detection more accurate and more efficient.
 We are planning to make our api open source so that way everyone can integrate our API into their apps or websites.
 
 
-![](https://github.com/gauravlath07/adivino-backend/blob/master/preview.gif | width=100)
+![](https://github.com/gauravlath07/adivino-backend/blob/master/preview.gif)
